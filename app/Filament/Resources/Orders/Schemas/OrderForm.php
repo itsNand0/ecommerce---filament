@@ -1,0 +1,56 @@
+<?php
+
+namespace App\Filament\Resources\Orders\Schemas;
+
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Schemas\Schema;
+
+class OrderForm
+{
+    public static function configure(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                Select::make('user_id')
+                    ->relationship('user', 'name')
+                    ->required(),
+                TextInput::make('order_number')
+                    ->required(),
+                TextInput::make('subtotal')
+                    ->required()
+                    ->numeric(),
+                TextInput::make('tax')
+                    ->required()
+                    ->numeric()
+                    ->default(0.0),
+                TextInput::make('shipping')
+                    ->required()
+                    ->numeric()
+                    ->default(0.0),
+                TextInput::make('total')
+                    ->required()
+                    ->numeric(),
+                Select::make('status')
+                    ->options([
+            'pending' => 'Pending',
+            'processing' => 'Processing',
+            'shipped' => 'Shipped',
+            'delivered' => 'Delivered',
+            'cancelled' => 'Cancelled',
+        ])
+                    ->default('pending')
+                    ->required(),
+                Select::make('payment_status')
+                    ->options(['pending' => 'Pending', 'paid' => 'Paid', 'failed' => 'Failed', 'refunded' => 'Refunded'])
+                    ->default('pending')
+                    ->required(),
+                TextInput::make('payment_method'),
+                Textarea::make('shipping_address')
+                    ->columnSpanFull(),
+                Textarea::make('notes')
+                    ->columnSpanFull(),
+            ]);
+    }
+}
