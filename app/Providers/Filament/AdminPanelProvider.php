@@ -28,6 +28,12 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('Admin Panel')
+            /* agregar logo en el futuro
+
+            ->brandLogo(asset('images/logo.png'))
+            ->brandLogoHeight('2rem') */
+
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -39,7 +45,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
-                FilamentInfoWidget::class,
+                /* FilamentInfoWidget::class, */
             ])
             ->middleware([
                 EncryptCookies::class,

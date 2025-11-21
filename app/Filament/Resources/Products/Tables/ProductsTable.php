@@ -22,10 +22,10 @@ class ProductsTable
                 TextColumn::make('slug')
                     ->searchable(),
                 TextColumn::make('price')
-                    ->money()
+                    ->money('PYG', locale: 'es_PY')
                     ->sortable(),
                 TextColumn::make('sale_price')
-                    ->money()
+                    ->money('PYG', locale: 'es_PY')
                     ->sortable(),
                 TextColumn::make('sku')
                     ->label('SKU')
