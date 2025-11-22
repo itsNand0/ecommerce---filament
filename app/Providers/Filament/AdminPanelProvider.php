@@ -30,10 +30,8 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->brandName('Admin Panel')
             /* agregar logo en el futuro
-
             ->brandLogo(asset('images/logo.png'))
             ->brandLogoHeight('2rem') */
-
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -60,6 +58,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                \App\Http\Middleware\AdminOnlyMiddleware::class,
             ]);
     }
 }

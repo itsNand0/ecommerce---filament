@@ -9,7 +9,7 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('layout');
+    return view('index');
 });
 
 Route::get('/categoria/{slug}', function($slug) {
@@ -21,6 +21,15 @@ Route::get('/producto/{slug}', function($slug) {
     $product = Product::where('slug', $slug)->with('category')->first();
     return view('product', ['product' => $product]);
 });
+
+// Buscador de productos por nombre
+Route::get('/buscar-productos', function() {
+    $query = request('q');
+    $products = $query
+        ? Product::where('name', 'like', "%$query%")->get()
+        : collect();
+    return view('search-products', compact('products', 'query'));
+})->name('products.search');
 
 // Rutas del carrito
 Route::get('/carrito', [CartController::class, 'index'])->name('cart.index');
@@ -35,20 +44,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function() {
         return redirect()->route('account.index');
     })->name('dashboard');
-    
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+
     // Rutas de cuenta y favoritos
     Route::get('/mi-cuenta', function() {
         return view('account.index');
     })->name('account.index');
-    
+
     Route::get('/favoritos', [FavoriteController::class, 'index'])->name('favorites.index');
     Route::post('/favoritos/{product}', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
     Route::delete('/favoritos/{id}', [FavoriteController::class, 'remove'])->name('favorites.remove');
-    
+
+    // Rutas de pedidos del usuario
+    Route::get('/mis-pedidos/{order}', [App\Http\Controllers\OrderController::class, 'show'])->name('orders.show');
+
     // Rutas de checkout
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
